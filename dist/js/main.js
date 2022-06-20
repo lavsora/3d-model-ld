@@ -1,0 +1,1 @@
+(()=>{"use strict";console.log("Привет, я из файла one.js"),console.log("Привет, я из файла two.js")})();
