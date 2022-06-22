@@ -3,6 +3,7 @@ const modal = () => {
     const buttons = document.querySelectorAll('.popup-btn');
     const closeBtn = modal.querySelector('.popup-close');
     const popupContent = modal.querySelector('.popup-content');
+    const width = document.documentElement.clientWidth;
 
     const animate = ({ timing, draw, duration }) => {
         let start = performance.now();
@@ -21,23 +22,6 @@ const modal = () => {
         });
     }
 
-    // const animateReverse = ({ timing, draw, duration }) => {
-    //     let start = performance.now();
-
-    //     requestAnimationFrame(function animate(time) {
-    //         let timeFraction =  duration / (time - start);
-    //         console.log(timeFraction)
-
-    //         if (timeFraction < 0) timeFraction = 0;
-
-    //         const progress = timing(timeFraction);
-
-    //         draw(progress);
-
-    //         if (timeFraction > 0) requestAnimationFrame(animate);
-    //     });
-    // }
-
     const quad = (timeFraction) => {
         return Math.pow(timeFraction, 2)
     }
@@ -53,31 +37,28 @@ const modal = () => {
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            animate({
-                timing: makeEaseOut(quad),
-                draw(progress) {
-                    modal.style.opacity = progress;
-                    popupContent.style.transform = `scale(${progress})`;
-                    modal.style.display = 'block';
-                },
-                duration: 700
-            })
-
+            if(width > 768) {
+                animate({
+                    timing: makeEaseOut(quad),
+                    draw(progress) {
+                        modal.style.opacity = progress;
+                        popupContent.style.transform = `scale(${progress})`;
+                        modal.style.display = 'block';
+                    },
+                    duration: 700
+                })
+            } else {
+                modal.style.display = 'block';
+            }  
         })
     })
 
+
+
     closeBtn.addEventListener('click', () => {
-        // animateReverse({
-        //     timing: makeEaseOut(quad),
-        //     draw(progress) {
-        //         modal.style.opacity = progress;
-        //         popupContent.style.transform = `scale(${progress})`;
-        //         modal.style.display = 'none';
-        //     },
-        //     duration: 1000
-        // })
         modal.style.display = 'none';
     })
+
 }
 
 export default modal;
