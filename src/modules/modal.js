@@ -10,7 +10,6 @@ const modal = () => {
 
         requestAnimationFrame(function animate(time) {
             let timeFraction = (time - start) / duration;
-            console.log(timeFraction)
 
             if (timeFraction > 1) timeFraction = 1;
 
