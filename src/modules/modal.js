@@ -3,14 +3,12 @@ const modal = () => {
     const buttons = document.querySelectorAll('.popup-btn');
     const closeBtn = modal.querySelector('.popup-close');
     const popupContent = modal.querySelector('.popup-content');
-    const width = document.documentElement.clientWidth;
 
     const animate = ({ timing, draw, duration }) => {
         let start = performance.now();
 
         requestAnimationFrame(function animate(time) {
             let timeFraction = (time - start) / duration;
-            console.log(timeFraction)
 
             if (timeFraction > 1) timeFraction = 1;
 
@@ -37,7 +35,7 @@ const modal = () => {
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            if(width > 768) {
+            if(window.innerWidth >= 768) {
                 animate({
                     timing: makeEaseOut(quad),
                     draw(progress) {
@@ -48,15 +46,29 @@ const modal = () => {
                     duration: 700
                 })
             } else {
+                modal.style.opacity = '1';
+                popupContent.style.transform = `scale(1)`;
                 modal.style.display = 'block';
-            }  
+            }
         })
     })
 
-
-
     closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
+        if(document.documentElement.clientWidth >= 768) {
+            animate({
+                timing: makeEaseOut(quad),
+                draw(progress) {
+                    modal.style.opacity = 1 - progress;
+                    popupContent.style.transform = `scale(${1 - progress})`;
+                    if ( progress >= 1) modal.style.display = 'none';
+                },
+                duration: 700
+            })
+        } else {
+            modal.style.opacity = '0';
+            popupContent.style.transform = `scale(0)`;
+            modal.style.display = 'none';
+        }
     })
 
 }
