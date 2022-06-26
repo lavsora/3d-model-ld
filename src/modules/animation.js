@@ -24,9 +24,33 @@ const animation = {
             else
                 return (2 - timing(2 * (1 - timeFraction))) / 2;
         }
+    },
+    runAnimation: ({modal, popupContent, drawToggle}) => {
+        animation.animate({
+            timing: animation.makeEaseOut(animation.quad),
+            draw(progress) {
+                if (drawToggle === true) {
+                    if (progress < .5) modal.style.opacity = progress * 2.5;
+
+                    if (progress < 1) {
+                        popupContent.style.transform = `scale(${progress * 1})`;
+                        modal.style.display = 'block';
+                    }  
+                }
+
+                if (drawToggle === false) {
+                    if (progress < 1) {
+                        popupContent.style.transform = `scale(${1 - progress * 1})`;
+                        modal.style.opacity = 1 - progress * 2.5
+                    };
+
+                    if ( progress >= .5) modal.style.display = 'none';
+                }
+                
+            },
+            duration: 700
+        })
     }
 }
 
-export const animate = animation.animate;
-export const quad = animation.quad;
-export const makeEaseOut = animation.makeEaseOut;
+export const runAnimation = animation.runAnimation;
