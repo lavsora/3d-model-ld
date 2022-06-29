@@ -6,6 +6,8 @@ const calc = (price = 100) => {
     const calcDay = calcBlock.querySelector('.calc-day');
     const total = document.getElementById('total');
 
+    let outTotalDebounce;
+
     const countCalc = () => {
         const calcTypeValue = +calcType.options[calcType.selectedIndex].value;
         const calcSquareValue = calcSquare.value;
@@ -30,11 +32,49 @@ const calc = (price = 100) => {
             totalValue = 0;
         }
 
-        total.textContent = totalValue;
+        return totalValue;
     }
 
+    const debounce = (fn, ms) => {
+        let timeOut;
+    
+        return function () {
+            const fnCall = () => { fn.apply(this, arguments) }
+    
+            clearTimeout(timeOut);
+    
+            timeOut = setTimeout(fnCall, ms)
+        }
+    }
+
+    const outTotal = (totalCalc, num, time) => {
+        const step = 10;
+
+        if (totalCalc > 0) {
+            let timeStep = Math.round(time / (totalCalc / step));
+            let idInterval = setInterval(() => {
+                num = num + step;
+
+                if (num === totalCalc) {
+                    clearInterval(idInterval);
+                } else if (num > totalCalc) {
+                    clearInterval(idInterval);
+                }
+
+                total.textContent = num;
+            }, timeStep)
+        } else {
+            return
+        }
+    }
+
+    outTotalDebounce = debounce(outTotal, 300)
+
     calcBlock.addEventListener('input', (e) => {
-        countCalc()
+        if (e.target === calcType || e.target === calcSquare ||
+            e.target === calcCount || e.target === calcDay) {
+            outTotalDebounce(countCalc(), 0, 300)
+        }
     })
 }
 
