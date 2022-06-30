@@ -46,7 +46,7 @@ const animateModal = ({ modal, popupContent, isOpened }) => {
             }
 
             if (!isOpened) {
-                if (progress < .5) modal.style.display = 'none';
+                if (progress < .2) modal.style.display = 'none';
                 if (progress < 1) {
                     popupContent.style.transform = `scale(${progress})`;
                     modal.style.opacity = progress;
