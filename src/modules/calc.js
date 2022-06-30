@@ -6,8 +6,6 @@ const calc = (price = 100) => {
     const calcDay = calcBlock.querySelector('.calc-day');
     const total = document.getElementById('total');
 
-    let outTotalDebounce;
-
     const countCalc = () => {
         const calcTypeValue = +calcType.options[calcType.selectedIndex].value;
         const calcSquareValue = calcSquare.value;
@@ -35,45 +33,23 @@ const calc = (price = 100) => {
         return totalValue;
     }
 
-    const debounce = (fn, ms) => {
-        let timeOut;
-    
-        return function () {
-            const fnCall = () => { fn.apply(this, arguments) }
-    
-            clearTimeout(timeOut);
-    
-            timeOut = setTimeout(fnCall, ms)
-        }
+    const animateValue = (start, end, duration) => {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            total.textContent = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        };
+        requestAnimationFrame(step);
     }
-
-    const outTotal = (totalCalc, num, time) => {
-        const step = 10;
-
-        if (totalCalc > 0) {
-            let timeStep = Math.round(time / (totalCalc / step));
-            let idInterval = setInterval(() => {
-                num = num + step;
-
-                if (num === totalCalc) {
-                    clearInterval(idInterval);
-                } else if (num > totalCalc) {
-                    clearInterval(idInterval);
-                }
-
-                total.textContent = num;
-            }, timeStep)
-        } else {
-            return
-        }
-    }
-
-    outTotalDebounce = debounce(outTotal, 300)
 
     calcBlock.addEventListener('input', (e) => {
         if (e.target === calcType || e.target === calcSquare ||
             e.target === calcCount || e.target === calcDay) {
-            outTotalDebounce(countCalc(), 0, 300)
+            animateValue(0, countCalc(), 500);
         }
     })
 }

@@ -1,4 +1,4 @@
-import { runAnimation } from "./animation";
+import { animateModal } from "./animation";
 
 const modal = () => {
     const modal = document.querySelector('.popup');
@@ -8,7 +8,8 @@ const modal = () => {
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             if(window.innerWidth >= 768) {
-                runAnimation({ modal, popupContent, drawToggle: true });
+                animateModal({ modal, popupContent, isOpened: true });
+                modal.style.display = 'block';
             } else {
                 modal.style.opacity = '1';
                 popupContent.style.transform = `scale(1)`;
@@ -20,7 +21,7 @@ const modal = () => {
     modal.addEventListener('click', (e) => {
         if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close')) {
             if(document.documentElement.clientWidth >= 768) {
-                runAnimation({ modal, popupContent, drawToggle: false });
+                animateModal({ modal, popupContent, isOpened: false });
             } else {
                 modal.style.opacity = '0';
                 popupContent.style.transform = `scale(0)`;
