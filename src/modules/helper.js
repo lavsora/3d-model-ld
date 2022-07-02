@@ -63,7 +63,8 @@ const animateValue = (total, {totalValue, lastValue}) => {
     animate({
         timing: makeEaseOut(quad),
         draw(progress) {
-            total.textContent = Math.floor(totalValue * progress)
+            if (lastValue === 0) total.textContent = Math.floor(totalValue * progress)
+            if (lastValue > 0) total.textContent = lastValue + Math.floor(difference * progress)
         },
         duration: 600
     })
