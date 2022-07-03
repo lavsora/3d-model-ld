@@ -57,4 +57,15 @@ const animateModal = ({ modal, popupContent, isOpened }) => {
     })
 }
 
-export { animateModal };
+const animateValue = (total, {totalValue, lastValue}) => {
+    animate({
+        timing: makeEaseOut(quad),
+        draw(progress) {
+            if (lastValue === 0) total.textContent = Math.floor(totalValue * progress)
+            if (lastValue > 0) total.textContent = lastValue + Math.floor((totalValue - lastValue) * progress)
+        },
+        duration: 600
+    })
+}
+
+export { animateModal, animateValue };

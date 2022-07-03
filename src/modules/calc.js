@@ -1,3 +1,5 @@
+import { animateValue } from "./animation";
+
 const calc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block');
     const calcType = calcBlock.querySelector('.calc-type');
@@ -5,6 +7,9 @@ const calc = (price = 100) => {
     const calcCount = calcBlock.querySelector('.calc-count');
     const calcDay = calcBlock.querySelector('.calc-day');
     const total = document.getElementById('total');
+
+    let lastValueArray = [];
+    let lastValue;
 
     const countCalc = () => {
         const calcTypeValue = +calcType.options[calcType.selectedIndex].value;
@@ -30,26 +35,16 @@ const calc = (price = 100) => {
             totalValue = 0;
         }
 
-        return totalValue;
-    }
+        lastValueArray.push(totalValue);
+        lastValue = lastValueArray[lastValueArray.length - 2];
 
-    const animateValue = (start, end, duration) => {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            total.textContent = Math.floor(progress * (end - start) + start);
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            }
-        };
-        requestAnimationFrame(step);
+        return { totalValue, lastValue };
     }
 
     calcBlock.addEventListener('input', (e) => {
         if (e.target === calcType || e.target === calcSquare ||
             e.target === calcCount || e.target === calcDay) {
-            animateValue(0, countCalc(), 500);
+            animateValue(total, countCalc());
         }
     })
 }
