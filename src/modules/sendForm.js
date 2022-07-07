@@ -7,24 +7,27 @@ const sendForm = ({ formId, someElem = [] }) => {
     const errorText = 'Ошибка!';
     const successText = 'Спасибо! Наш менеджер с вами свяжется!';
 
-    formElements.forEach(input => {
-        input.addEventListener('invalid', (e) => {
-            e.preventDefault();
-            e.target.classList.add('error');
+    const checkInput = () => {
+        formElements.forEach(input => {
+            input.addEventListener('invalid', (e) => {
+                e.preventDefault();
+                
+                e.target.classList.add('error');
+            });
+    
+            input.addEventListener('input', (e) => {
+                e.preventDefault()
+    
+                if (e.target.name === 'user_name' && /^[а-яёЁ\s]{2,}$/gi.test(e.target.value)) {
+                    e.target.classList.remove('error');
+                } else if (e.target.name === 'user_email' && /^[^ ]+@[^ ]+\.[a-z]{2,3}$/gi.test(e.target.value)) {
+                    e.target.classList.remove('error');
+                } else if (e.target.name === 'user_phone' && /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10,}$/g.test(e.target.value)) {
+                    e.target.classList.remove('error');
+                }
+            });
         });
-
-        input.addEventListener('input', (e) => {
-            e.preventDefault()
-
-            if (e.target.name === 'user_name' && /^[а-яёЁ\s]{2,}$/gi.test(e.target.value)) {
-                e.target.classList.remove('error');
-            } else if (e.target.name === 'user_email' && /^[^ ]+@[^ ]+\.[a-z]{2,3}$/gi.test(e.target.value)) {
-                e.target.classList.remove('error');
-            } else if (e.target.name === 'user_phone' && /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10,}$/g.test(e.target.value)) {
-                e.target.classList.remove('error');
-            }
-        });
-    });
+    }
 
     const validate = (list) => {
         let success = true;
@@ -104,7 +107,7 @@ const sendForm = ({ formId, someElem = [] }) => {
         console.log(error.message)
     }
 
-
+    checkInput();
 }
 
 export default sendForm;
