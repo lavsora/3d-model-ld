@@ -1,6 +1,5 @@
 const sendForm = ({ formId, someElem = [] }) => {
     const form = document.getElementById(formId);
-    const formElements = form.querySelectorAll('input');
 
     const statusBlock = document.createElement('div');
     const errorText = 'Ошибка!';
@@ -20,14 +19,24 @@ const sendForm = ({ formId, someElem = [] }) => {
         return loader;
     }
 
-    const checkInput = () => {
-        formElements.forEach(input => {
-            input.addEventListener('invalid', (e) => {
-                e.preventDefault();
-                
-                e.target.classList.add('error');
-            });
-    
+    const checkInput = (list) => {
+        list.forEach(input => {
+            if(input.name === 'user_name' && input.value === '') {
+                input.classList.add('error');
+            } else if (input.name === 'user_email' && input.value === '') {
+                input.classList.add('error');
+            } else if (input.name === 'user_phone' && input.value === '') {
+                input.classList.add('error');
+            }
+
+            if (input.name === 'user_name' && !(/^[а-яёЁ\s]{2,}$/gi.test(input.value))) {
+                input.classList.add('error');
+            } else if (input.name === 'user_email' && !(/^[^ ]+@[^ ]+\.[a-z]{2,3}$/gi.test(input.value))) {
+                input.classList.add('error');
+            } else if (input.name === 'user_phone' && !(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10,}$/g.test(input.value))) {
+                input.classList.add('error');
+            }
+
             input.addEventListener('input', (e) => {
                 e.preventDefault()
     
@@ -44,6 +53,8 @@ const sendForm = ({ formId, someElem = [] }) => {
 
     const validate = (list) => {
         let success = true;
+
+        checkInput(list);
 
         list.forEach(input => {
             if (input.classList.contains('error')) {
@@ -106,6 +117,8 @@ const sendForm = ({ formId, someElem = [] }) => {
         } else {
             statusBlock.textContent = 'Ошибка! Введите данные правильно.'
         }
+
+        setTimeout(() => statusBlock.textContent = '', 4000);
     }
 
     try {
@@ -121,8 +134,6 @@ const sendForm = ({ formId, someElem = [] }) => {
     } catch (error) {
         console.log(error.message)
     }
-
-    checkInput();
 }
 
 export default sendForm;

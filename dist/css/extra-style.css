@@ -2,6 +2,10 @@
     outline: 2px solid red;
 }
 
+.error:focus {
+    outline: 2px solid red;
+}
+
 .white {
     color: white;
 }
