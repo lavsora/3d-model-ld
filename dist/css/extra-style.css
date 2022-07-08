@@ -1,3 +1,7 @@
 .error {
     outline: 2px solid red;
 }
+
+.white {
+    color: white;
+}

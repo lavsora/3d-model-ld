@@ -59,6 +59,7 @@ const sendForm = ({ formId, someElem = [] }) => {
             formBody[key] = val
         })
 
+        statusBlock.classList.add('white');
         statusBlock.textContent = loadText;
         form.append(statusBlock)
 
