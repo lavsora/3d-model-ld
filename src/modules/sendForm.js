@@ -76,6 +76,7 @@ const sendForm = ({ formId, someElem = [] }) => {
     }
 
     const submitForm = (form, loader = preloader()) => {
+        const formElements = form.querySelectorAll('input');
         const formData = new FormData(form)
         const formBody = {}
 
